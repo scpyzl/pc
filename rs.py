@@ -16,6 +16,12 @@ def get_one_page(url):
         return re.text
     return None
 def main():
+   fp = open(r'C:\Users\20441\Desktop\maoyan5.csv', 'a+',newline='')
+   # 字典形式的写入csv文件中
+   fieldnames = ['name', 'data-src', 'star', 'release-data']
+   writes = csv.DictWriter(fp, fieldnames=fieldnames)
+   writes.writeheader()
+   fp.close()
    for offset in range(10):
      url="http://maoyan.com/board/4?offset="+str(offset*10)
      html=get_one_page(url)
@@ -28,11 +34,11 @@ def parse_one_page(html):
     soup=BeautifulSoup(html,'lxml')
     dd=soup.find_all(name='dd')
     dic={}
-    fp=open(r'C:\Users\20441\Desktop\maoyan.csv','a+')
+    fp=open(r'C:\Users\20441\Desktop\maoyan5.csv','a+',newline='')
     #字典形式的写入csv文件中
     fieldnames=['name','data-src','star','release-data']
     writes=csv.DictWriter(fp,fieldnames=fieldnames)
-    writes.writeheader()
+    # writes.writeheader()
     for img_movinfo in dd:
         #这里的img_movinfo是tag类型，他的一个兄弟节点是空白再下一个就是有实际内容了
         img_src=img_movinfo.img.next_sibling.next_sibling
@@ -50,6 +56,5 @@ def parse_one_page(html):
            writes.writerow(dic)
         except:
             print("none")
-    fp.close()
 main()
 
